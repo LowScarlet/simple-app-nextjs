@@ -1,0 +1,75 @@
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:@localhost:3306/putri_uas"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  Admin
+  Customer
+}
+
+model User {
+  id               Int       @id @default(autoincrement())
+  fullName         String
+  phoneNumber      String    @unique
+  password         String
+  role             Role      @default(Customer)
+  registrationDate DateTime  @default(now())
+  Bid              Bid[]
+  Auctions         Auction[]
+}
+
+enum AuctionStatus {
+  Unstarted
+  OnGoing
+  Closed_NoBid
+  Closed_Unpaid
+  Closed_OnPreparation
+  Closed_OnSent
+  Closed_Done
+}
+
+enum AuctionMethod {
+  Open_Bid
+  Close_Bid
+}
+
+model Auction {
+  id          Int           @id @default(autoincrement())
+  isOpen      Boolean       @default(false)
+  code        String
+  icon        String?
+  title       String
+  description String
+  startingBid Float
+  createdAt   DateTime      @default(now())
+  endsAt      DateTime
+  method      AuctionMethod @default(Open_Bid)
+  status      AuctionStatus @default(Unstarted)
+  resi        String?
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId  Int
+  category    Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  bids        Bid[]
+}
+
+model Bid {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auctionId Int
+  auction   Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  auctions Auction[]
+}
