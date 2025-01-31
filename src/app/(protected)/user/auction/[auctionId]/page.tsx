@@ -117,17 +117,6 @@ export default function Auction_Detail({ params }: { params: Promise<{ auctionId
           !dataAuction.isOpen && dataAuction.bids.length > 0 && dataAuction.bids[0].user.id === authUser.id ? (
             dataAuction.status === 'Closed_Unpaid' ? (
               <div role="alert" className="flex flex-col justify-center items-center text-center alert alert-error">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 shrink-0 stroke-current"
-                  fill="none"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
                 <span>Kamu telah memenangkan lelang ini!, Silahkan untuk menyelesaikan pembayaran!</span>
                 <span>BRI: 0023 4567 8910 234 <br />ATAS NAMA: PT. LELANG YUK SEJAHTERA</span>
                 <span>Kirim Bukti Pembayaran Dengan Kode Lelang <b>{dataAuction.code}</b> ke Whatsapp: 08123456789</span>
@@ -150,65 +139,21 @@ export default function Auction_Detail({ params }: { params: Promise<{ auctionId
             dataAuction.resi ? (
               dataAuction.status === 'Closed_OnSent' ? (
                 <div role="alert" className="alert alert-success">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
                   <span>Kamu telah menyelesaikan pengiriman, Sedang menunggu pihak ekspedisi untuk menyelesaikan pengiriman!</span>
                 </div>
               ) : (
                 <div role="alert" className="alert alert-success">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
                   <span>Transaksi telah berhasil diselesaikan!</span>
                 </div>
               )
             ) : (
               dataAuction.status === 'Closed_Unpaid' ? (
-                <div role="alert" className="alert alert-error">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div role="alert" className="alert alert-warning">
                   <span>Menunggu Pemenang untuk menyelesaikan pembayaran!</span>
                 </div>
               ) : (
 
-                <div role="alert" className="alert alert-error">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div role="alert" className="alert alert-warning">
                   <span>Pemenang telah menyelesaikan pembayaran, Silahkan kirim barang setelah itu submit Kode Resi di Manajemen Penyelenggara!</span>
                 </div>
               )
