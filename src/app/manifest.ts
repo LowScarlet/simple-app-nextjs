@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
  
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Aplikasi Coba Lelang',
-    short_name: 'COBA LELANG',
+    name: 'LelangYuk',
+    short_name: 'LelangYuk',
     description: 'Aplikasi Khusus Untuk Pelelangan Barang',
     start_url: '/',
     display: 'standalone',

@@ -28,7 +28,7 @@ export default function RootLayout({
       <div className="px-4 pt-4">
         <h3 className="font-medium text-xs">Hi, {authUser.fullName}</h3>
         <div className="flex justify-between">
-          <h1 className="font-bold text-xl">Aplikasi Lelang</h1>
+          <h1 className="font-bold text-xl">LelangYuk</h1>
           <div className="flex justify-end items-center gap-x-4 text-xl">
             {
               authUser.role === 'Admin' ? (

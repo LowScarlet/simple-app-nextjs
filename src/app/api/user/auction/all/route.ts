@@ -8,6 +8,9 @@ export async function GET(req: NextRequest) {
   try {
     await delay(1000); // 1 second delay
     const data = await myPrisma.auction.findMany({
+      where:  {
+        isOpen: true
+      },
       orderBy: {
         id: 'desc'
       },

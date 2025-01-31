@@ -133,9 +133,15 @@ export default function Auction_Detail({ params }: { params: Promise<{ auctionId
                 <span>Kirim Bukti Pembayaran Dengan Kode Lelang <b>{dataAuction.code}</b> ke Whatsapp: 08123456789</span>
               </div>
             ) : (
-              <div role="alert" className="alert alert-success">
-                <span>Kamu telah menyelesaikan pembayaran, Barang akan segera dikirim!</span>
-              </div>
+              dataAuction.status === 'Closed_Done' ? (
+                <div role="alert" className="alert alert-success">
+                  <span>Transaksi telah diselesaikan!</span>
+                </div>
+              ) : (
+                <div role="alert" className="alert alert-success">
+                  <span>Kamu telah menyelesaikan pembayaran, Barang akan segera dikirim!</span>
+                </div>
+              )
             )
           ) : undefined
         }
@@ -158,7 +164,6 @@ export default function Auction_Detail({ params }: { params: Promise<{ auctionId
                   <span>Kamu telah menyelesaikan pengiriman, Sedang menunggu pihak ekspedisi untuk menyelesaikan pengiriman!</span>
                 </div>
               ) : (
-
                 <div role="alert" className="alert alert-success">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -171,24 +176,42 @@ export default function Auction_Detail({ params }: { params: Promise<{ auctionId
                       strokeWidth="2"
                       d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Kamu memenangkan lelang ini dan telah menerimanya.</span>
+                  <span>Transaksi telah berhasil diselesaikan!</span>
                 </div>
               )
             ) : (
-              <div role="alert" className="alert alert-error">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 shrink-0 stroke-current"
-                  fill="none"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Pemenang telah menyelesaikan pembayaran, Silahkan kirim barang setelah itu submit Kode Resi di Manajemen Penyelenggara!</span>
-              </div>
+              dataAuction.status === 'Closed_Unpaid' ? (
+                <div role="alert" className="alert alert-error">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Menunggu Pemenang untuk menyelesaikan pembayaran!</span>
+                </div>
+              ) : (
+
+                <div role="alert" className="alert alert-error">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Pemenang telah menyelesaikan pembayaran, Silahkan kirim barang setelah itu submit Kode Resi di Manajemen Penyelenggara!</span>
+                </div>
+              )
             )
           ) : undefined
         }
