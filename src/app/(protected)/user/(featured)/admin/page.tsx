@@ -1,14 +1,79 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 
 'use client'
 
 import { useAuth } from "@/context/AuthContext";
-import { AuctionModel, usePortfolio } from "@/model/portfolio";
-import { User } from "@prisma/client";
-import Link from "next/link";
+import axiosInstance from "@/lib/axiosInstance";
+import { AuctionModel, useAdminAuction } from "@/model/adminAuction";
+import { useState } from "react";
+import { MdDelete } from "react-icons/md";
+import { mutate } from "swr";
 
-const Portfolios = ({ dataPortfolio, isLoading, authUser }: { dataPortfolio?: AuctionModel[], isLoading: boolean, authUser: User }) => {
+const Portfolios = ({ dataPortfolio, isLoading }: { dataPortfolio?: AuctionModel[], isLoading: boolean }) => {
+  const [isLoading2, setIsLoading2] = useState(false);
+
+  const closeAuction = async (id: number) => {
+    try {
+      setIsLoading2(true);
+      await axiosInstance.post(`/api/user/adminAuction/${id}/close`);
+      mutate((key: string) => key.startsWith('/api/user/adminAuction/all'));
+    } catch (err: any) {
+      console.error('Error adding to cart:', err);
+    } finally {
+      setIsLoading2(false);
+    }
+  };
+
+  const deleteAuction = async (id: number) => {
+    try {
+      setIsLoading2(true);
+      await axiosInstance.post(`/api/user/adminAuction/${id}/del`);
+      mutate((key: string) => key.startsWith('/api/user/adminAuction/all'));
+    } catch (err: any) {
+      console.error('Error adding to cart:', err);
+    } finally {
+      setIsLoading2(false);
+    }
+  };
+
+  const makeDoneAuction = async (id: number) => {
+    try {
+      setIsLoading2(true);
+      await axiosInstance.post(`/api/user/adminAuction/${id}/isDone`);
+      mutate((key: string) => key.startsWith('/api/user/adminAuction/all'));
+    } catch (err: any) {
+      console.error('Error adding to cart:', err);
+    } finally {
+      setIsLoading2(false);
+    }
+  };
+
+  const makeIsPaidAuction = async (id: number) => {
+    try {
+      setIsLoading2(true);
+      await axiosInstance.post(`/api/user/adminAuction/${id}/isPaid`);
+      mutate((key: string) => key.startsWith('/api/user/adminAuction/all'));
+    } catch (err: any) {
+      console.error('Error adding to cart:', err);
+    } finally {
+      setIsLoading2(false);
+    }
+  };
+
+  const startAuction = async (id: number) => {
+    try {
+      setIsLoading2(true);
+      await axiosInstance.post(`/api/user/adminAuction/${id}/start`);
+      mutate((key: string) => key.startsWith('/api/user/adminAuction/all'));
+    } catch (err: any) {
+      console.error('Error adding to cart:', err);
+    } finally {
+      setIsLoading2(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center my-32">
@@ -27,7 +92,7 @@ const Portfolios = ({ dataPortfolio, isLoading, authUser }: { dataPortfolio?: Au
     <div className="z-0 space-y-2">
       {
         dataPortfolio?.map((item, index) => (
-          <Link href={'/user/auction/' + item.id} className="block shadow-md py-2" key={index}>
+          <div className="block shadow-md py-2" key={index}>
             <div className="flex gap-2 p-2">
               <div className="flex-none">
                 <div className="avatar">
@@ -39,53 +104,61 @@ const Portfolios = ({ dataPortfolio, isLoading, authUser }: { dataPortfolio?: Au
               <div className="flex justify-between grow">
                 <div className="grow">
                   <h2 className="text-sm">{item.title}</h2>
-                  <h1 className="font-bold text-sm">Nilai: {item.bids.length > 0 ? item.bids[0].amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) : item.startingBid.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h1>
-                  {
-                    item.resi ? (
-                      <h1 className="mt-4 font-medium text-xs">Resi: {item.resi}</h1>
-                    ) : undefined
-                  }
+                  <h1 className="font-bold text-sm">{item.bids.length > 0 ? item.bids[0].amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) : item.startingBid.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h1>
                   <div className="flex justify-between items-end mt-4">
-                    <button className="btn btn-neutral btn-xs">
-                      {
-                        item.isOpen ? (
-                          item.status
-                        ) : (
-                          item.bids[0].userId === authUser.id ? (
-                            item.status
-                          ) : (
-                            'Kalah - Telah Berakhir'
-                          )
-                        )
-                      }
-                    </button>
-                    <h1 className="font-medium text-xs">Anda: <span>{item.bids.filter(bid => bid.userId === authUser.id)[0].amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span></h1>
+                    <h1 className="font-bold text-xs">
+                      {item.status}
+                    </h1>
+                    <h1 className="font-bold text-xs">Kode: {item.code}</h1>
                   </div>
                 </div>
+                <button className="block text-xl" onClick={()=>deleteAuction(item.id)} >
+                  <MdDelete />
+                </button>
               </div>
             </div>
-            {
-              item.bids[0].userId === authUser.id && item.status === 'Closed_Unpaid' ? (
-                <div role="alert" className="alert alert-warning">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 shrink-0 stroke-current"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  <span>Kamu Memenangkan Lelang ini, Klik untuk menyelesaikan pembayaran!</span>
-                </div>
-              ) : undefined
-            }
-          </Link>
+            <div className="p-2 text-sm">
+              <h1>Ubah Status:</h1>
+              <div className="mt-2">
+                {
+                  item.status === 'OnGoing' ? (
+                    <button onClick={() => closeAuction(item.id)} className="btn btn-neutral btn-xs">
+                      Tutup Lelang
+                    </button>
+                  ) : (
+                    item.status === 'Closed_Unpaid' ? (
+                      <button onClick={() => makeIsPaidAuction(item.id)} className="btn btn-neutral btn-xs">
+                        Pemenang Menyelesaikan Pembayaran
+                      </button>
+                    ) : (
+                      item.status === 'Closed_OnSent' ? (
+                        <button onClick={() => makeDoneAuction(item.id)} className="btn btn-neutral btn-xs">
+                          Pemenang Telah Menerima Barang
+                        </button>
+                      ) : (
+                        item.status === 'Unstarted' ? (
+                          <button onClick={() => startAuction(item.id)} className="btn btn-neutral btn-xs">
+                            Mulai Lelang
+                          </button>
+                        ) : (
+                          item.status === 'Closed_OnPreparation' ? (
+                            <button disabled className="btn btn-neutral btn-xs">
+                              Sedang menunggu pemiliki lelang menyelesaikan pengiriman
+                            </button>
+                          ) : (
+                            <h1 className="text-center text-xs">Pelelangan telah selesai.</h1>
+                          )
+                        )
+                      )
+                    )
+                  )
+                }
+              </div>
+            </div>
+          </div>
         ))
       }
-    </div>
+    </div >
   )
 }
 
@@ -98,7 +171,7 @@ export default function Portfolio() {
   const {
     data: dataPortfolio,
     isLoading
-  } = usePortfolio();
+  } = useAdminAuction();
 
   if (!isAuthenticated || !authUser) {
     return (<>Error</>)
@@ -109,7 +182,7 @@ export default function Portfolio() {
       <div className="flex justify-between">
         <h1 className="font-bold text-base">Manajemen Admin</h1>
       </div>
-      <Portfolios dataPortfolio={dataPortfolio} isLoading={isLoading} authUser={authUser} />
+      <Portfolios dataPortfolio={dataPortfolio} isLoading={isLoading} />
     </div>
   );
 }

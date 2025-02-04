@@ -8,23 +8,6 @@ export async function POST(
   try {
     const resolvedParams = await Promise.resolve(params);
     const auctionId = resolvedParams.auctionId;
-    const userId = req.cookies.get('userId')?.value;
-    if (!userId) {
-      return NextResponse.json({ message: 'User ID not found' }, { status: 401 });
-    }
-
-    const data0 = await myPrisma.auction.findUnique({
-      where: {
-        id: parseInt(auctionId, 10)
-      },
-      include: {
-        bids: true
-      }
-    });
-
-    if (!data0) {
-      return NextResponse.json({ message: 'Auction not found' }, { status: 404 });
-    }
 
     const data = await myPrisma.auction.update({
       where: {
@@ -32,8 +15,8 @@ export async function POST(
       },
       data: {
         id: parseInt(auctionId, 10),
-        status: 'OnGoing',
-        isOpen: true
+        status: 'Closed_OnPreparation',
+        isOpen: false
       },
     });
     return NextResponse.json(data, { status: 200 })

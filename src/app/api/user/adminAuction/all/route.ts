@@ -3,11 +3,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { myPrisma } from "@/lib/prisma"
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 export async function GET(req: NextRequest) {
   try {
-    await delay(1000);
     const data = await myPrisma.auction.findMany({
       orderBy: {
         id: 'desc'

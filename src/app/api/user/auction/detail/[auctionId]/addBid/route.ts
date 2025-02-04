@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { myPrisma } from "@/lib/prisma"
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ auctionId: string }> | { auctionId: string } }
@@ -15,7 +13,6 @@ export async function POST(
     if (!userId) {
       return NextResponse.json({ message: 'User ID not found' }, { status: 401 });
     }
-    await delay(1000);
 
     const data = await myPrisma.bid.create({
       data: {
